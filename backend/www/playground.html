@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="it">
+<head>
+	<meta charset="utf-8">
+
+	<title>Javascript Playground</title>
+
+	<meta name="description" content="Esempi di Javascript Take 2">
+	<meta name="author" content="Daniele Morosinotto">
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+	<link rel="stylesheet" href="styles/jscodepad.css">
+	
+	<style>
+		body { 
+			background: url('images/DEMO.png') no-repeat center center fixed;
+			background-position:center;
+			background-size: 100% 100%;
+			-moz-background-size: cover;
+			-webkit-background-size: cover;
+			-o-background-size: cover;
+		} 
+	</style>
+
+	<!-- Javascript Console Pad -->
+	<script src="lib/jscodepad.js"></script>
+	<script src="lib/ace/ace.js"></script>	
+
+	<!--[if lt IE 9]>
+	<script src="lib/polyfill/html5shiv.js"></script>
+	<![endif]-->	
+
+	<!-- Load Q, jQuery and RequireJS for samples -->
+	<script src="lib/q.min.js"></script>
+	<script src="lib/jquery.min.js"></script>
+	<script src="lib/requirejs.min.js"></script>
+	<script>
+	requirejs.config({
+		//Initialize RequireJS by default load any module IDs from js/samples
+		baseUrl: 'js/samples'
+	});
+	</script>
+</head>
+<body>
+
+
+<div id="testground">
+  <div class="mask">
+  </div>
+
+  <div class="pad" data-type="codepad">
+	<div class="closeButton">╋</div>
+	
+	<div class="container">
+	
+	  <div class="console">
+		<div class="title">Javascript Console</div>
+		<div class="switchToPad switchbutton"> Go to Playground</div>
+		<div class="JSConsole">
+		  <div class="output" editable="true"> </div>
+		  <input type="text"></input>
+		</div>
+	  </div>
+
+	  <div class="codepad">
+		<div class="title">Javascript Playground &nbsp; 
+			<select id="chooseSamples">
+				<option value="">Choose a Sample...</option>
+				<option value="js/samples/scope.js">Scope di funzione</option>
+				<option value="js/samples/scope_shadow.js">Scope Shadowing</option>
+				<option value="js/samples/hoisting.js">Scope Hoisting</option>
+				<option value="js/samples/iife_privacy.js">IIFE + Privacy</option>
+				<option value="js/samples/that_this.js">Closure var that=this;</option>
+				<option value="js/samples/closure.js">Closure cattura stato variabile</option>
+				<option value="js/samples/mixin.js">MixIn (overwrite)</option>
+				<option value="js/samples/extend.js">MixIn (extend)</option>
+				<option value="js/samples/mixinto.js">MixInto (no side-effect)</option>
+				<option value="js/samples/revealing.js">Revealing Module Esempio</option>
+				<option value="js/samples/namespace.js">Revealing Module + Namespace</option>
+				<option value="js/samples/singleton.js">Revealing Module + Singleton</option>
+				<option value="js/samples/define.js">AMD define object</option>
+				<option value="js/samples/console.js">AMD define module</option>
+				<option value="js/samples/hello.js">AMD define con dipendenze</option>				
+				<option value="js/samples/require.js">AMD require diverse sintassi</option>				
+				<option value="backend/api+edge/random.js">CJS: module.exports | GET /random Node.js</option>
+				<option value="backend/middleware/consoleColor.js">CJS: exports | middleware consoleColor Node.js</option>
+				<option value="backend/middleware/logger.js">CJS: require + uso UMD | middleware logger Node.js</option>
+				<option value="js/samples/pretty.js">UMD pretty usato da RequireJS e Node.js</option>
+				<option value="js/samples/unittest.js">UMD richiamo pretty da RequireJS</option>
+				<option value="js/samples/promise.js">Promise chiamate AJAX asincrone</option>
+
+				<option value="js/samples/pattern_iife.js">Pattern: IIFE</option>
+				<option value="js/samples/pattern_revealing.js">Pattern: Revealing Module Classico</option>
+				<option value="js/samples/pattern_revealing_alternativo.js">Pattern: Revealing Module Alternativo</option>
+				<option value="js/samples/pattern_singleton.js">Pattern: Singleton</option>
+				<option value="js/samples/pattern_umd.js">Pattern: UMD</option>
+				<option value="js/samples/pattern_umd_namespace.js">Pattern: UMD + Namespace</option>
+
+				<option value="backend/server.js">Node: Express config app</option>
+				<option value="backend/api+edge/helloworld.js">Node: EDGE.js helloworld .NET</option>
+				<option value="backend/api+edge/calc.js">Node: EDGE.js passing func JS/.NET</option>
+				<option value="backend/mvc/_router.js">Node: MVC Router + Razor View</option>
+				<option value="backend/mvc/Controllers/HomeController.js">Node: MVC Controller</option>
+				<option value="backend/mvc/Controllers/ValuesController.js">Node: WebAPI Controller</option>
+			<select>
+		</div>
+		<div class="switchToConsole switchbutton"> Switch To Console</div>
+		<div class="JSCodePad" >
+<xmp id="jsPlayground" class="code" style="text-align:left; line-height:normal;">
+//NOTE: Prima di usare gli esempi sulle Promise avviare server Node:
+// - da Termianal eseguire  ./serve   oppure   node backend/server.js
+// - Hosting di default su  http://localhost:3000
+jQuery.ajax({url: '/random'})
+	.done(function(r){ console.log(r) })
+	.fail(function(e){ console.error(e.responseText)});
+</xmp>
+		  <div class="output" editable="true"> </div>
+		  <div class="run">run</div>
+		</div>
+	  </div>
+	  
+	</div>
+  </div>
+
+  <div class="startButton">
+  </div>
+</div>
+
+</body>
+</html>
