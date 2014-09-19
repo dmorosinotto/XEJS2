@@ -1,0 +1,28 @@
+@{
+    ViewBag.Title = "Values API using Angular";
+}
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("~/js/angular-min.js")"></script>    
+    <script type="text/javascript" src="@Url.Content("~/values/.js")"></script>
+}
+
+<div id="body" ng-app="ValuesApp" 
+<div ng-controller="ValuesCtrl">
+    <section class="featured">
+        <div class="content-wrapper">            
+        	<form class="form-inline">
+        		<input type="text" ng-model="newValue" />
+        		<button ng-click="Add()">Aggiungi</button>
+        	</form>            
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        <h3>Lista dei Valori:</h3>        
+        <ol class="round">
+            <li ng-repeat="val in values track by $index" class="content-wrapper">
+            	<h4 ng-show="val">{{$index}}. {{val}} <button ng-click="Del($index)">Elimina</button></h4>
+            </li>
+        </ol>
+    </section>
+</div>
+</div>

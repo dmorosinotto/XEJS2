@@ -1,0 +1,673 @@
+﻿<!doctype html>
+<html lang="it">
+<head>
+	<meta charset="utf-8">
+
+	<title>Javascript Take2 - After the Basics</title>
+
+	<meta name="description" content="Corso su alcuni pattern di programmazione usati in Javascript">
+	<meta name="author" content="Daniele Morosinotto">
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+	<link rel="stylesheet" href="css/reveal.min.css">
+	<link rel="stylesheet" href="css/jscodepad.css">
+	<link rel="stylesheet" href="css/theme/xe.css" id="theme">
+
+	<!-- For syntax highlighting -->
+	<link rel="stylesheet" href="lib/css/eclipse.css">
+
+	<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+	<script>
+		if( window.location.search.match( /print-pdf/gi ) ) {
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = 'css/print/pdf.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		}
+	</script>
+
+	<!-- Javascript Console Pad -->
+	<script src="lib/jscodepad.js"></script>
+	<script src="lib/ace/ace.js"></script>
+
+	<!--[if lt IE 9]>
+	<script src="lib/polyfill/html5shiv.js"></script>
+	<![endif]-->
+
+	<!-- Load Q, jQuery and RequireJS for samples -->
+	<script src="lib/q.min.js"></script>
+	<script src="lib/jquery.min.js"></script>
+	<script src="lib/requirejs.min.js"></script>
+	<script>
+	requirejs.config({
+		//Initialize RequireJS by default load any module IDs from js/samples
+		baseUrl: 'js/samples'
+	});
+	</script>
+	
+</head>
+<body>
+<div class="reveal">
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+	<section>
+		<section data-state="intro">
+			<br/><br/>
+			<h2>Javascript Take2</h2>
+			<h3>After the <a href="http://dmorosinotto.github.io/XEJS">Basics</a> </h3>
+			<p>by Daniele Morosinotto</p>
+			
+			<small>Slide Online: <a href="http://dmorosinotto.github.io/XEJS2">http://dmorosinotto.github.io/XEJS2</a></small>
+		</section>
+		<section>
+			<h3>Chi sono (#devlife):</h3>
+			<img src="images/Who.gif" alt="@dmorosinotto"/>			
+		</section>
+		<section>
+			<h2>Perchè siete qui?</h2>
+			<video width="90%" height="90%" controls poster="images/Matrix_Inizio.jpg">
+  				<source src="http://localhost:3000/videos/Matrix_Inizio.mp4" type="video/mp4">
+  				<source src="http://localhost:3000/videos/Matrix_Inizio.ogg" type="video/ogg">
+  				<source src="http://localhost:3000/videos/Matrix_Inizio.webm" type="video/webm">
+  				<img src="images/Matrix_Inizio.jpg" alt="Adesso ti dico perche' sei qui..." />
+			</video> 
+		</section>
+		<section>
+			<h2>Javascript perchè</h2>			
+			<blockquote>
+				<p>IMHO: "Forse è uno dei pochi linguaggi veramente</p>
+				<p><strong>portabile e universale</strong> (ndr. "cross-tutto!") "</p>
+			</blockquote>
+			<blockquote>
+				<p>Inoltre può essere usato non solo <strong>client-side</strong> 
+				<br/>ma anche <strong>server-side</strong> con
+				<a href="http://nodejs.org/"<em>node.js</em></a>.</p>				
+			</blockquote>
+		</section>
+	</section>
+	
+<section data-markdown data-separator="^\n===\n$" data-vertical="^\n---\n">
+<script type="text/template">
+#Basics Recap
+
+Materiale completo Online: [http://dmorosinotto.github.io/XEJS](http://dmorosinotto.github.io/XEJS)
+
+---
+
+##Caratteristiche Linguaggio:
+- E' un linguaggio di **scripting** (quindi interpretato), con sintassi derivata 
+da **Java/C** che ne rende facile l'adozione. <small>("purtroppo")</small>
+
+- **Dynamic typing** che non vuol dire che è senza tipi, anzi!
+<br/> Ma i tipi sono associati alle variabili NON in modo Statico (possono cambiare a run-time).
+
+- **Prototype-base** ereditarieta/estensibilita basata sul prototipo.
+<br/> Tramite la quale possiamo simulare anche istanziazione e Classi.
+
+- **First-class functions** consente paradigmi di prog. Funzionale.
+<br/> Ma è possibile usare anche altri stili di prog. imperativa e OOP.
+
+---
+
+##I Tipi
+![](images/Types.gif)
+
+---
+
+## Tutto è *Object*
+
+### Alcune caratteristiche:
+
+- Sono essenzialmente **elenco di coppie key-value** , vengono anche detti *"array associativi" , "hash" , "map" o "dictionary"* 
+	- **key**: è un identificatore **stringa** (CASE SENSITIVE, e può iniziare con alfanumerici _ $ oppure qualsiasi altra 'stringa' 
+	- **value**: un valore di **qualsiasi tipo**, non solo primitive, ma anche altri Oggetti o "Special"!
+	
+- Sono **Dynamic** perchè è possibile *aggiungere/togliere membri* (proprietà o metodi) all'Oggetto in ogni momento!
+
+- **NON vengono definiti a partire da "Classi"** al contrario di .NET (e altri linguaggi OOP) non esiste *"strict Type Checking"*!
+
+- Sono basati sul **Prototype** e grazie a questo e' possibile *estendere ed ereditare Oggetti da altri Oggetti*!
+
+---
+
+### Object Literal:
+
+![](images/Objects.gif)
+
+---
+
+### Prototype:
+- In Javascript un Oggetto può *ereditare* o meglio *estendere direttamente* un'altro Oggetto, questo grazie al **prototype**.
+- E' possibile creare un oggetto con **Object.create(proto)**;
+
+```javascript
+var objEreditato = Object.create(objPrototipoBase);
+//objEreditato viene creato e la Prototype-Chain viene inizializzata 
+//in modo che objPrototipoBase sia il *prototype* di objEreditato!
+```
+- Creando gli oggetti in questo modo viene esplicitamente inizializzata la **Prototype-Chain**.
+- Anche se creiamo l'oggeto in altri modi (ad es: Literal **{...}**), implicitamente tutti gli oggetti ereditano da **Object**.
+- E' possibile ricavare a run-time il prototype in ES5 grazie a **Object.getPrototypeOf**( *obj* ) oppure tramite *obj* **.\_\_proto\_\_**
+
+---
+
+###Prototype-Chain:
+
+> Questo meccanismo è alla base dell'**estendibilità** di Javascript o volendo dell' "**Ereditarietà Differenziale**"
+
+![](images/PrototypeChain.gif)
+La *Prototype-Chain* viene utilizzata da Javascript per risolvere l'accesso ai membri dell'oggetto.
+
+Se un membro non viene trovato all'inteno dell'oggetto, Javascript tenta di trovarlo negli oggetti padre risalendo la Prototype-Chain.
+
+---
+
+## OOP in Javascript
+
+### "Ricetta" per creare oggetti:
+
+- Il **Costruttore** contiene il codice di inizializzazione che usa *this.propX=...;* per settare lo stato dell'oggetto (*senza return*)
+- I **Metodi** dell'oggetto sono spostati nel **prototype del Costruttore** in modo da essere condivisi con tutte le istanze.
+- Quando si deve **creare un'istanza** dell'oggetto si deve usare l'operatore **new** (in modo da avere il *this* corretto)!
+
+![](images/Classical_new.gif)
+
+---
+
+### "Ricetta" per l'ereditarietà:
+- Per gestire in modo corretto l'ereditarietà dobbiamo
+ settare la **Prototype-Chain** in modo tale da avere il 
+ *Figlio.prototype* che punta al *Padre.prototype*
+- Utilizziamo l'invocazione esplicita **.call(this,...)** per:
+	- richiamare il *costruttore Padre*	all'interno del *costruttore Figlio*
+	  in modo da inizializzare correttamente lo stato dell'oggetto.
+	- oppure quando abbiamo bisongo di fare l'*Override* di un metodo, *riutilizzando* il codice del *Padre*.
+
+![](images/Classical_Inherits.gif)
+
+---
+
+### ES6 *class* + *extend*
+
+In ES6 verrà introdotta la sintassi **class** + **extends** che internamente genererà il modello Classico
+solamente con una sintassi più OOP (simile a quella a cui siamo abituati in C/C#)
+
+![](images/ES6_vs_Classicall.gif)
+
+===
+
+# After the Basics
+
+---
+
+## Regole di Scoping in JS:
+
+- In Javascript NON esiste il *{ block scope }* - Esiste solamente lo **<a href="javascript:XE_LoadSample('js/samples/scope.js')">SCOPE</a> di Funzione** che definisce il contesto (ndr limita l'accessibilità delle variabili).
+- Tutte le **dichiarazioni** di variabili *var x,y;* e/o *funzion fn(a,b){...}* definite internamente ad una funzione **subiscono <a href="javascript:XE_LoadSample('js/samples/hoisting.js')">HOISTING</a>**, ossia vengono "spostate" in testa alla funzione!
+- Dalle funzioni interne si ha **visibilità** su tutte le variabili presenti nella funzione padre, nonno ... e ricorsivamente **fino ad arrivare all'oggetto global / window** sempre se prima non hanno subito <a href="javascript:XE_LoadSample('js/samples/scope_shadow.js')">SHADOWING</a>, ossia sono state ridefinite usando lo stesso nome.
+- Ed in fine nel caso in cui *venga restituita* una **funzione interna**, questa **può catturare** e mantenere lo **stato** delle variabili presenti nello scope, creando una [CLOSURE](#/2/2).
+
+---
+
+### CLOSURE
+
+> <small>[Wikipedia](http://it.wikipedia.org/wiki/Chiusura_%28informatica%29): Una chiusura è una astrazione che combina una funzione con le variabili libere presenti nell'ambiente in cui è definita secondo le regole di scope del linguaggio. Le variabili libere dell'ambiente rimangono accessibili per tutta la durata di vita (extent) della chiusura e pertanto persistono nel corso di invocazioni successive della chiusura. Di conseguenza, le variabili della chiusura possono essere usate per mantenere uno stato ed emulare costrutti OOP...</small> 
+
+
+#### Alcuni casi di utilizzo:
+- Catturare e **mantenere lo stato interno** di un <a href="javascript:XE_LoadSample('js/samples/closure.js')">Contatore</a>
+- Trucchetto <a href="javascript:XE_LoadSample('js/samples/that_this.js')">var that=this</a>; per **catturare il contesto** di esecuzione **per** una successiva **callback asincrona**!
+
+
+---
+
+### IIFE
+> **IIFE** = **I**mmediatly **I**nvoked **F**unction **E**xpression <br/>
+> Serve ad **Evitare di "sporcare"** l'oggetto globale risolvendo possibili problemi di conflitti/side-effects 
+><br/>(ndr <a href="javascript:XE_LoadSample('js/samples/iife_privacy.js')">Global Pollution</a>)
+
+```javascript
+//IIFE PATTERN
+(function(){
+	//Il vostro codice va qui e viene eseguito subito! 
+	//con il vantaggio che però tutte le
+	//var x, y, z;			// variabili
+	//function f(){ ... };	//e funzioni
+	//definite qui all'interno NON sono accessibili all'esterno 
+	//e quindi NON c'è problema di "global pollution"
+
+})();
+```
+
+
+Praticamente tutte le dichiarazioni di variabili e funzioni sono racchiuse all'interno di una *funzione anonima che viene definita ed immediatamente eseguita* in modo tale da isolare le definizioni all'interno dello **Scope di Funzione** che è privato! 
+
+---
+
+## Extending Objects
+
+- Sfruttando il fatto che in *Javascript* gli **oggetti possono essere modificati dinamicamente** si può fare [Composition](http://en.wikipedia.org/wiki/Composition_over_inheritance) facilmente con uno di questi pattern:
+	- [MixIn](#/2/5) con funzione **extend**: copia/scovrascrive membri 
+> <small>[Wikipedia](http://en.wikipedia.org/wiki/Mixin) In object-oriented programming languages, a **mixin** is a class which contains **a combination of methods from other classes**. How such a combination is done depends on the language, but it is **not by inheritance**. If a combination contains all methods of combined classes it is equivalent to multiple inheritance. Mixins **encourage code reuse** and avoid well-known pathologies associated with multiple inheritance</small>
+
+	- [MixInto](#/2/6) 	usato per simulare *"ereditarietà multipla"*: copia metodi ma ne mantiene il contesto originale
+
+
+---
+
+### MixIn o extend 
+
+Scrivendo una banale funzione è possibile **estendere*/aumentare* ** un'oggetto *&lt;target&gt;* copiando i membri da altri oggetti *&lt;mixins&gt;*!
+
+```javascript
+function mixIn(target /*, ...mixins*/ ) {
+    var i, k, mixin, n = arguments.length;	//numero di argomenti passati mixins* 
+    if (n<=1) return target;   //se passo solo target lo ritorno subito invariato
+    for(i=0; i<n; i++) {
+      mixin = arguments[i];    //elaboro ogni singolo oggetto mixin passato
+      for(k in mixin) {        //copiando tutti i membri in target (sovrascivendo)
+        if (mixin.hasOwnProperty(k)) target[k] = mixin[k];        
+      }
+    }
+    return target;             //ritorno l'oggetto "aumentato"
+}
+```
+
+Esempi di utilizzo:
+
+- Definizione dei parametri attuali di una funzione che accetta un <a href="javascript:XE_LoadSample('js/samples/mixin.js')">options map</a>, ma fa fallback su defaults
+- Con una piccola modifica si può fare una funzione <a href="javascript:XE_LoadSample('js/samples/extend.js')">extend</a> che copia i membri, ma **senza sovrascriverli** se sono già definiti!
+
+---
+
+### MixInto
+
+Per risolvere i possibili problemi di "side-effects" generati dalla copia dei membri (nel caso di conflitti sui nomi), si può usare questa funzione che fa **composizione** però **mantenendo il contesto di chiamata** relativo all'oggetto di origine usando *bind*
+
+```javascript
+function mixInto(target, source /*, ...onlyMethods*/){
+  var i, method, n = arguments.length;
+	if (n<=1) return target;   //se passo solo target lo ritorno subito invariato
+	if (n>2)                   //posso passare anche elenco dei metodi da replicare
+		for(i=2; i<n; i++) {        
+      	   method = arguments[i];
+      	   if (typeof source[method] === 'function') { //copio solo alcuni metodi
+      		  //prima di associare il method a target facci il bind al source
+        	  target[method] = source[method].bind(source); }//mantiene contesto
+	} else {				   //altrimenti copio tutti i metodi presenti in source
+		for(method in source) {     
+      	   if (typeof source[method] === 'function') {  //copio TUTTE le funzioni
+        	  //prima di associare il method a target facci il bind al source
+        	  target[method] = source[method].bind(source); }//mantiene contesto
+	}   }
+	return target;  //ritorno l'oggetto composto con le funzioni bindate al source
+}
+```
+
+Con questo approccio si può "simulare" l'Ereditarietà Multipla facendo **Composition senza side-effects**, vedi esempio <a href="javascript:XE_LoadSample('js/samples/mixinto.js')">Logger</a>
+
+===
+
+# Modular<br/>Javascript
+
+---
+
+## Come fare i Moduli
+
+> Nonappena la complessità dell'applicazione aumenta *(ndr >200 linee)* è necessario suddividere il codice in **Moduli** per poter **organizzare meglio** le varie funzionalità **e favorirne il riutilizzo** ([DRY](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself) + [Single Res](http://en.wikipedia.org/wiki/Single_responsibility_principle)) 
+
+Per fare questo in Javascript possiamo utilizzare i pattern:
+
+- [Revealing Module](#/3/2)
+- Revealing Module [Alternativo](#/3/3)
+- <a href="javascript:XE_LoadSample('js/samples/singleton.js')">Singleton</a> & <a href="javascript:XE_LoadSample('js/samples/namespace.js')">Namespace</a>
+- ed altri classici OOP come: Factory / MixIn / *Class* ...
+
+---
+
+### Revealing Module Pattern
+
+```javascript
+//REVEALING MODULE CLASSICO 
+var NOME_MOD = (function(){
+	var _privVar, pubVar;			//Variabili private e pubbliche
+	function _fn(){ /*...*/ }		//Funzioni private
+
+	//ritorna all'esterno l'interfaccia pubblica del modulo
+	return {
+		pub: 	getter/setter pubVar,
+		method: function(){ /*...*/ }
+	};
+})(); //eseguo la IIFE in modo da creare e salvare in NOME_MOD l'istanza del modulo
+```
+
+Praticamente quando IIFE esegue, ritorna un oggetto che contiene l'interfaccia pubblica del modulo e la rende accessibile a tutto il resto del mondo memorizzandola nella variabile NOME_MOD <a href="javascript:XE_LoadSample('js/samples/revealing.js')">ESEMPIO Utils weekday / workday</a>
+
+---
+
+### Revealing Module Alternativo
+
+```javascript
+//REVEALING MODULE ALTERNATIVO CON IIFE A CUI PASSO GLOBAL E NOME MODULO DA ESPORRE
+(function(root, moduleName){
+	var _privVar, pubVar;			//Variabili private e pubbliche
+	function _fn(){ /*...*/ }		//Funzioni private
+
+	//al posto di fare return {... public ...} il modulo 
+	//si AUTO-ESPONE nel contesto esterno col nome passato
+	root[moduleName] = {
+		pub: 	getter/setter pubVar,
+		method: function(){ /*...*/ }
+	};
+})( this || window, 'NOME_MOD' ); 
+//al posto di fare 		var NOME_MOD = Revealing(/* con return {...} */);
+//eseguo una IIFE a cui passo root = contesto o window + moduleName='NOME_MOD'
+```
+
+Praticamente è come il Revealing Module solo che invece di ritornare un oggetto ed obbligare il chiamante a predisporre una variabile, questa IIFE si "auto-passa" il contesto esterno e il nome del modulo con cui esporsi (sempre e solo l'interfaccia pubblica)
+
+---
+
+## Definire e caricare Moduli
+
+- **AMD** = Asyncronous Module Definizion ([spec](https://github.com/amdjs/amdjs-api/blob/master/AMD.md)) -
+	Viene usato principalmente *lato client e* il *caricamento* avviene in modo *asincrono*! <small>(sfrutta una callback per proseguire quando tutte le dipendenze sono state caricate)</small>
+	- si basa su: [define](#/3/5) e [require](#/3/6)
+	- [RequireJS](http://requirejs.org/docs/api.html) è un module loader che implementa AMD
+
+- **CJS** = CommonJS ([spec](http://wiki.commonjs.org/wiki/Modules/1.1.1)) -
+	Viene usato principalmente *lato server e* il *caricamento* avviene in modo *sincrono*! <small>(la chiamata alla require(); è bloccante)</small>
+	- si basa su: [exports](#/3/7) , [module.exports](#/3/7) e [require](#/3/7)
+	- [Node.js](http://nodejs.org/api/modules.html) utilizza questo tipo di logica per i suoi moduli (*npm*)
+	- [Browserify](http://browserify.org/) permette di elaborare i moduli e creare dei *bundle*
+- **UMD** = Pattern universale per *unificare i vari casi*!
+	- definizione di [Base](#/3/8) o con [Namespace](#/3/9)
+
+---
+
+### AMD - define(name? , ['dep1','dep2'...]? , factory(dep1,dep2){ ... });
+- **name?** : nome del modulo (*stringa opzionale*) di default viene definito in base al *percorso del file*
+- **[deps]?** : *array di stringhe* contenente il nome *delle dipendenze* (è *opzionale* se non ho dipendenze)
+- **factory**: è una *funzione* su cui viene fatto dependency injection dei parametri (in base alle dipendenze specificate) e che viene *richiamata in modo asincrono solo dopo che tutte le dipedenze esplicitate sono state risolte*! 
+- ESEMPI: Il compito della funzione è di eseguire e ritornare un'<a href="javascript:XE_LoadSample('js/samples/define.js')">oggetto</a>, una <a href="javascript:XE_LoadSample('js/samples/hello.js')">funzione</a> o un <a href="javascript:XE_LoadSample('js/samples/console.js')">modulo</a> che saranno poi esposti come modulo *&lt;name&gt;*!
+
+---
+
+### AMD - require(['dip1','dip2'...]? , callback(dip1,dip2) { ... });
+- **[deps]?** : *array di stringhe* contente il nome *delle dipedenze* necessarie per eseguire la callback
+	- <small>NOTA: Per compatibilità con CommonJS per default vengono igniettate le seguenti dipendenze: **['require', 'exports', 'module']**</small>
+- **callback** : è una *funzione* su cui viene fatto dependency injection dei parametri (in base alle dipedenze specificate) e che viene *richiamata in modo asincrono solo dopo che tutte le dipedenze esplicitate sono state risolte*! 
+	
+	All'interno della callback possiamo scrivere la nostra logica di business che sfrutta i moduli richiesti grazie ai parametri *dep1, dip2, ...* - Vedi <a href="javascript:XE_LoadSample('js/samples/require.js')">ESEMPI</a> classici, e con sintassi CommonJS.
+
+---
+
+### CommonJS (ndr Moduli Node.js)
+
+- La differenza sostazioale è che il caricamento dei moduli avviene in maniera **sincrona**, ossia la funzione *require()* è bloccante e ritorna solamente dopo che il modulo richiesto è stato caricato (con eventuale risoluzione al volo delle sue dipendenze interne)
+- Utilizzo e sintassi molto più semplice: 
+	- Ogni singolo file è un "modulo" e ha un contesto di esecuzione privata
+	- Per esporre qualcosa all'esterno basta arricchire l'oggetto *<a href="javascript:XE_LoadSample('backend/middleware/consoleColor.js')">exports</a>.xxx = ...;*
+	- O nel caso in cui il modulo consista semplicemente in una funzione (o un costruttore) basta settare *<a href="javascript:XE_LoadSample('backend/api+edge/random.js')">module.exports</a> = ...;*
+	- Infine per dichiarare ed usare una dipendenza da qualsiasi punto del codice basta fare *var xxx = <a href="javascript:XE_LoadSample('backend/middleware/logger.js')">require</a>('nomemodulo');*
+	- Tipicamente nomemodulo è la path (assoluta o relativa) per arrivare al file .js
+
+---
+
+### UMD = Universal Module Definition
+
+Pattern che ci permette di scrivere una volta sola il modulo ed esporlo in entrambi AMD e CJS
+
+```javascript
+//IIFE UMD PATTERN
+(function ( root, glbname, definition ){  
+	if ( typeof define === 'function' && define.amd ){		
+		define(definition);		 			// AMD Module
+	} else if ( typeof module !== 'undefined' && module.exports ) { 		
+		module.exports = definition();		// Node.js Module
+	} else { 	// Assign to current context or global object		
+		root[glbname] = definition();
+	}
+})( this || window || global, 'GLOBAL_MODULE_NAME', function () {
+	/* IL CODICE VERO E PROPRIO DEL MODULO VA QUI E ALLA FINE FA 
+	return { ... alla RevealingModule ...};
+	*/
+});
+```
+ESEMPIO: definizione di <a href="javascript:XE_LoadSample('js/samples/pretty.js')">pretty.js</a> e richiamo da <a href="javascript:XE_LoadSample('js/samples/unittest.js')">RequireJS</a>
+
+---
+
+### UMD con Namespace
+
+La dizzerenza rispetto a UMD di base è solo nel caso in cui il modulo venga esposto nel contesto gloable, con questo codice è possibile definire un Namespace (struttura gerarchica) in cui esporre il modulo per evitare il più possibile conflitti sui nomi!
+
+```javascript
+//IIFE UMD PATTERN WITH GLOBAL NAMESPACE.HIERARCHY
+(function ( root, glbnamesape, definition ) {
+    if ( typeof define === 'function' && define.amd ){         
+        define(definition);					// AMD Module
+    } else if ( typeof module !== 'undefined' && module.exports ) {        
+        module.exports = definition();      // Node.js Module
+    } else { // spezzo il glbnamesape in sequenza di package=namespace[i] 
+             // e crea la corrispondente struttura oggetti        
+        var namespaces = glbnamesape.split('.');
+        var scope = root;
+        for (var i = 0; i < namespaces.length; i++) {
+            var packageName = namespaces[i];
+            if (scope && i == namespaces.length - 1) {
+                scope[packageName] = definition(); //SETTO OGGETTO ALL'ULTIMO LEVEL
+            } else if (typeof scope[packageName] === 'undefined') {
+                scope[packageName] = {}; //CREO OGGETTI INTERMEDI
+            }
+            scope = scope[packageName];
+        }
+    }
+})( this || window || global , 'NAMESPACE.HIERARCHY.GLOB_NAME', function () {
+    /* IL CODICE VERO E PROPRIO DEL MODULO VA QUI E ALLA FINE FA 
+    return { ... alla RevealingModule ... };
+    */
+});
+```
+
+===
+
+# Asyncronous<br/>Javascript
+
+---
+
+## Promise
+
+- Tipicamente quando si deve eseguire del codice asincrono in JS si ricorre alle callback.
+
+- Però quando le operazioni da svolgere sono più di una in sequenza o meno, facilmente si incappa nel problema del <a href="javascript:XE_LoadSample('js/samples/callback_hell.js')">callback hell</a> o "<a href="javascript:XE_LoadSample('js/samples/callback_hell.js')">pyramid of doom</a>"
+- Per alleviare questo problema si può riccorre alle **Promise** (ndr *Future* o *.Thenable*) che permettono di scrivere del **codice** decisamente **più leggibile e lineare**!
+
+- Io uso la libreria [Q.js](https://github.com/kriskowal/q), ma ci sono diverse altre implementazioni anche perchè c'è una specifica [Promises/A+](https://github.com/promises-aplus/promises-spec) che definisce un'interfaccia standard a cui gli implementatori  aderiscono.
+
+<a href="javascript:XE_LoadSample('js/samples/promise.js')">ESEMPI</a>: di Promise utilizzata per richiamare una webapi via AJAX (mostrando vari casi di chiamata: *Singola*, *Chain/sequenziale*, e *Multipla/parallela* con gestione degli Errori!!!)
+
+---
+
+# Node.js 
+
+## Server-sideJavascript
+
+Il [backend](http://localhost:3000/mvc) degli esempi sulle Promise è hostato in Node.js 
+
+> <small>[Node.js](http://nodejs.org/) **is a platform built on** Chrome's **JavaScript** runtime (ndr Google V8) for easily building fast, scalable network applications. Node.js **uses** an event-driven (ndr **EventLoop**) , **non-blocking I/O** (ndr **but JS code run SingleThread**) model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.</small>
+
+###Realizzato utilizzando:
+
+- Express.js (<a href="javascript:XE_LoadSample('backend/server.js')">app.config</a>)
+	- Simple backend GET (<a href="javascript:XE_LoadSample('backend/api+edge/random.js')">random</a>) 
+	- Middleware (<a href="javascript:XE_LoadSample('backend/middleware/logger.js')">logger</a>)
+	- Router basics (<a href="javascript:XE_LoadSample('backend/mvc/Controllers/ValuesController.js')">Web Api</a>)
+	- MVC (<a href="javascript:XE_LoadSample('backend/mvc/Controllers/HomeController.js')">Controller</a> + <a href="javascript:XE_LoadSample('backend/mvc/_router.js')">Razor View</a>)	
+- EDGE.js (<a href="javascript:XE_LoadSample('backend/api+edge/helloworld.js')">HelloWorld</a> + <a href="javascript:XE_LoadSample('backend/api+edge/calc.js')">Calc <small>collaborando con .NET</small></a>)) 
+
+</script>
+</section>
+
+		<section>
+			<section>
+				<h2>Cosa leggere</h2>
+				<ul>				
+					<li>Articolo sui MixIn / MixInto in javascript
+					<a class="roll" href="http://lostechies.com/derickbailey/2012/10/07/javascript-mixins-beyond-simple-object-extension/">@derickbailey</a></li>
+					<li>Articolo su Modular javascript AMD & CommonJS
+					<a class="roll" href="http://addyosmani.com/writing-modular-js/">@addyosmani</a></li>
+					<li>Serie di Ebook online "You Don't Know Javascript"<a class="roll" href="https://github.com/getify/You-Dont-Know-JS">@getify</a></li>
+					<li>Ebook online con raccolta di Javascript Patterns<a class="roll" href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/#mixinpatternjavascript">@addyosmani</a></li>
+					<li>Documentazione API online di<a class="roll" href="http://nodejs.org/documentation/api/">Node.js</a>	v0.10.32 e <a class="roll" href="http://expressjs.com/4x/api.html">Express.js</a>v4.x</li>
+					<li>Tutorial su <a class="roll" href="http://tjanczuk.github.io/edge/#/">EDGE.js</a> e come configurarlo su
+					<a class="roll" href="https://github.com/tjanczuk/edge/tree/mono#building-on-osx">Mac + mono</a>by Tomasz Janczuk
+					<a class="roll" href="https://twitter.com/tjanczuk">@tjanczuk</a></li>
+				</ul>
+			</section>
+			<section>
+				<h2>A voi la scelta ...</h2>
+				<video width="90%" height="90%" controls poster="images/Matrix_Fine.jpg">
+					<source src="http://localhost:3000/videos/Matrix_Fine.mp4" type="video/mp4">
+					<source src="http://localhost:3000/videos/Matrix_Fine.ogg" type="video/ogg">
+					<source src="http://localhost:3000/videos/Matrix_Fine.webm" type="video/webm">
+					<img src="images/Matrix_Fine.jpg" alt="... ti sto offrendo solo la verita', ricordalo, niente di piu'!" />
+				</video>
+			</section>
+			<section data-state="feedback">
+			  <h1>THE END</h1>
+			  <h3>by Daniele Morosinotto</h3>
+			  <br/>
+			  <h5>Contatti:</h5>
+			  <ul>
+				<li><a href="mailto:dmorosinotto@icloud.com">dmorosinotto@icloud.com</a></li>
+				<li>twiter <a href="https://twitter.com/dmorosinotto">@dmorosinotto</a></li>
+				<li>download <a href="http://1drv.ms/1Dnir5p">http://1drv.ms/1Dnir5p</a></li>
+			  <ul>	
+			  <br/>
+			  <small>Slide realizzate con <a href="http://lab.hakim.se/reveal-js">reveal.js</a> + <a href="http://ace.c9.io/">ace code editor</a><br/>
+			  Server-side: <a href="http://nodejs.org/">node.js</a> + <a href="http://expressjs.com/4x/api.html">express.js</a> + <a href="https://github.com/tjanczuk/edge">edge.js</a>.</small>
+			</section>
+		</section>
+
+	</div><!-- end slides -->
+</div><!-- end reveal -->
+
+
+<div id="testground">
+  <div class="mask">
+  </div>
+
+  <div class="pad" data-type="codepad">
+	<div class="closeButton">╋</div>
+	
+	<div class="container">
+	
+	  <div class="console">
+		<div class="title">Javascript Console</div>
+		<div class="switchToPad switchbutton"> Go to Playground</div>
+		<div class="JSConsole">
+		  <div class="output" editable="true"> </div>
+		  <input type="text"></input>
+		</div>
+	  </div>
+
+	  <div class="codepad">
+		<div class="title">Javascript Playground &nbsp; 
+			<select id="chooseSamples">
+				<option value="">Choose a Sample...</option>
+				<option value="js/samples/scope.js">Scope di funzione</option>
+				<option value="js/samples/scope_shadow.js">Scope Shadowing</option>
+				<option value="js/samples/hoisting.js">Scope Hoisting</option>
+				<option value="js/samples/iife_privacy.js">IIFE + Privacy</option>
+				<option value="js/samples/that_this.js">Closure var that=this;</option>
+				<option value="js/samples/closure.js">Closure cattura stato variabile</option>
+				<option value="js/samples/mixin.js">MixIn (overwrite)</option>
+				<option value="js/samples/extend.js">MixIn (extend)</option>
+				<option value="js/samples/mixinto.js">MixInto (no side-effect)</option>
+				<option value="js/samples/revealing.js">Revealing Module Esempio</option>
+				<option value="js/samples/namespace.js">Revealing Module + Namespace</option>
+				<option value="js/samples/singleton.js">Revealing Module + Singleton</option>
+				<option value="js/samples/define.js">AMD define object</option>
+				<option value="js/samples/console.js">AMD define module</option>
+				<option value="js/samples/hello.js">AMD define con dipendenze</option>				
+				<option value="js/samples/require.js">AMD require diverse sintassi</option>				
+				<option value="backend/api+edge/random.js">CJS: module.exports | GET /random Node.js</option>
+				<option value="backend/middleware/consoleColor.js">CJS: exports | middleware consoleColor Node.js</option>
+				<option value="backend/middleware/logger.js">CJS: require + uso UMD | middleware logger Node.js</option>
+				<option value="js/samples/pretty.js">UMD pretty usato da RequireJS e Node.js</option>
+				<option value="js/samples/unittest.js">UMD richiamo pretty da RequireJS</option>
+				<option value="js/samples/callback_hell.js">Callback hell "Pyramid of Doom"</option>
+				<option value="js/samples/promise.js">Promise chiamate AJAX asincrone</option>
+
+				<option value="js/samples/pattern_iife.js">Pattern: IIFE</option>
+				<option value="js/samples/pattern_revealing.js">Pattern: Revealing Module Classico</option>
+				<option value="js/samples/pattern_revealing_alternativo.js">Pattern: Revealing Module Alternativo</option>
+				<option value="js/samples/pattern_singleton.js">Pattern: Singleton</option>
+				<option value="js/samples/pattern_umd.js">Pattern: UMD</option>
+				<option value="js/samples/pattern_umd_namespace.js">Pattern: UMD + Namespace</option>
+
+				<option value="backend/server.js">Node: Express config app</option>
+				<option value="backend/api+edge/helloworld.js">Node: EDGE.js helloworld .NET</option>
+				<option value="backend/api+edge/calc.js">Node: EDGE.js passing func JS/.NET</option>
+				<option value="backend/mvc/_router.js">Node: MVC Router + Razor View</option>
+				<option value="backend/mvc/Controllers/HomeController.js">Node: MVC Controller</option>
+				<option value="backend/mvc/Controllers/ValuesController.js">Node: WebAPI Controller</option>
+			<select>
+		</div>
+		<div class="switchToConsole switchbutton"> Switch To Console</div>
+		<div class="JSCodePad" >
+			<xmp id="jsPlayground" class="code" style="text-align:left; line-height:normal;">
+//NOTE: Prima di usare gli esempi sulle Promise avviare server Node:
+// - da Termianal eseguire  ./serve   oppure   node backend/server.js
+// - Hosting di default su  http://localhost:3000
+jQuery.ajax({url: 'http://localhost:3000/random'})
+	.done(function(r){ console.log(r) })
+	.fail(function(e){ console.error(e.responseText)});
+			</xmp>
+		  <div class="output" editable="true"> </div>
+		  <div class="run">run</div>
+		</div>
+	  </div>
+	  
+	</div>
+  </div>
+
+  <div class="startButton">
+  </div>
+</div>
+
+<script src="js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+	// Full list of configuration options available here:
+	// https://github.com/hakimel/reveal.js#configuration
+	Reveal.initialize({
+		
+		controls: true,
+		progress: true,
+		history: true,
+		center: true,
+
+		theme: "xe", // available themes are in /css/theme
+		transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/none
+		
+		// Don't forget to add the dependencies
+		dependencies: [
+			{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+			{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+			{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+		]
+	});
+	
+	function showCode(n) {
+		
+	}
+</script>
+	
+</body>
+</html>

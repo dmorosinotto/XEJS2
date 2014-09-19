@@ -1,0 +1,51 @@
+@{
+    ViewBag.Title = "About";
+}
+<div id="body">
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h2>Welcome to MVC (Razor)</h2>
+                <h1>Hosted by <a href="http://nodejs.org/">Node.js</a></h1>
+            </hgroup>            
+            <p>
+                Il template di base &egrave; quello di un'applicazione ASP.NET MVC 4 WebAPI, ma con qualche differenza ...
+            </p>
+            <p>
+                Innanzitutto l'host <b>NON</b> &egrave; IIS e <b>NON</b> usa ASP.NET, ma invece &egrave; <b>@model.platform</b>
+            </p>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        <h3>Nel dettaglio questo &egrave; l'elenco dei moduli NPM che ho utilizzato:</h3>
+        <ol class="round">
+            <li class="one">
+                <h5>express</h5>
+                E' un framework Web per Node che ho utilizzato al posto di ASP.NET per gestire tutte le Pagine
+                e API configurato tramite delle <a href="http://expressjs.com/4x/api.html#router">Route</a>
+                e sfruttando vari <a href="http://expressjs.com/4x/api.html#middleware.api">Middleware</a> (concetti simili a OWIN)
+                <dl>
+                    <dt><a href="https://github.com/expressjs/serve-static">express.static</a></dt><dd>Serve i file statici dell'applicazione</dd>
+                    <dt><a href="https://github.com/expressjs/body-parser">body-parser</a></dt><dd>parse del body in formato json e "form"</dd>
+                    <dt><a href="https://www.npmjs.org/package/cors">cors</a></dt><dd>abilita cross-domain request</dd>
+                    <dt><a href="https://github.com/expressjs/errorhandler">errorhandler</a></dt><dd>gestice e logga gli eventuali errori</dd>
+                </dl>   
+            </li>
+            <li class="two">
+                <h5>kally-razor</h5>
+                Un middleware di terze parti che implementa la sintassi Razor come engine per il render delle pagine/viste<br/>
+                Scaricate da <a href="https://github.com/nufyoot/kally-razor">GIT ver 0.4.0</a> non ancora disponibile su npm!
+            </li>
+            <li class="three">
+                <h5>edge</h5>
+                <a href="https://github.com/tjanczuk/edge"><img src="https://38.media.tumblr.com/418ea4c78e283560ceafa9da889e1e20/tumblr_n1fr8ij8Fr1shf8zxo1_500.jpg" alt="CATS & UNICORNS!" width="50" height="50" /></a>
+                Usato come "ponte di collegamento"</a> per far interagire il mondo Node/Javascript con .NET/C#
+                
+                
+            </li>
+        </ol>
+    </section>
+</div>
+@section scripts { 
+    <footer>@model.platform</footer>     
+}

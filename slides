@@ -1,0 +1,4 @@
+#!/bin/bash
+#Start serving simple Node server with Slides on http://localhost:8080
+backend/node_modules/node-static/bin/cli.js
+exit;
