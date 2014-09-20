@@ -290,20 +290,20 @@ Per risolvere i possibili problemi di "side-effects" generati dalla copia dei me
 ```javascript
 function mixInto(target, source /*, ...onlyMethods*/){
   var i, method, n = arguments.length;
-	if (n<=1) return target;   //se passo solo target lo ritorno subito invariato
-	if (n>2)                   //posso passare anche elenco dei metodi da replicare
-		for(i=2; i<n; i++) {        
-      	   method = arguments[i];
-      	   if (typeof source[method] === 'function') { //copio solo alcuni metodi
-      		  //prima di associare il method a target facci il bind al source
-        	  target[method] = source[method].bind(source); }//mantiene contesto
-	} else {				   //altrimenti copio tutti i metodi presenti in source
-		for(method in source) {     
-      	   if (typeof source[method] === 'function') {  //copio TUTTE le funzioni
-        	  //prima di associare il method a target facci il bind al source
-        	  target[method] = source[method].bind(source); }//mantiene contesto
-	}   }
-	return target;  //ritorno l'oggetto composto con le funzioni bindate al source
+  if (n<=1) return target;  //se passo solo target lo ritorno subito invariato
+  if (n>2)                  //posso passare anche elenco dei metodi da replicare
+    for(i=2; i<n; i++) {
+      method = arguments[i];
+      if (typeof source[method] === 'function') { //copio solo alcuni metodi
+        //prima di associare il method a target facci il bind al source
+        target[method] = source[method].bind(source); } //mantiene contesto
+      } else {              //altrimenti copio tutti i metodi presenti in source
+        for(method in source) {
+          if (typeof source[method] === 'function') {  //copio TUTTE le funzioni
+            //prima di associare il method a target facci il bind al source
+            target[method] = source[method].bind(source); } //mantiene contesto
+      } }
+  return target;  //ritorno l'oggetto composto con le funzioni bindate al source
 }
 ```
 
@@ -401,7 +401,7 @@ Praticamente è come il Revealing Module solo che invece di ritornare un oggetto
 	- <small>NOTA: Per compatibilità con CommonJS per default vengono igniettate le seguenti dipendenze: **['require', 'exports', 'module']**</small>
 - **callback** : è una *funzione* su cui viene fatto dependency injection dei parametri (in base alle dipedenze specificate) e che viene *richiamata in modo asincrono solo dopo che tutte le dipedenze esplicitate sono state risolte*! 
 	
-	All'interno della callback possiamo scrivere la nostra logica di business che sfrutta i moduli richiesti grazie ai parametri *dep1, dip2, ...* - Vedi <a href="javascript:XE_LoadSample('js/samples/require.js')">ESEMPI</a> classici, e con sintassi CommonJS.
+	All'interno della callback possiamo scrivere la nostra logica di business che sfrutta i moduli richiesti grazie ai parametri *dep1, dip2, ...* - Vedi <a href="javascript:XE_LoadSample('js/samples/requirejs.js')">ESEMPI</a> classici, e con sintassi CommonJS.
 
 ---
 
@@ -410,9 +410,9 @@ Praticamente è come il Revealing Module solo che invece di ritornare un oggetto
 - La differenza sostazioale è che il caricamento dei moduli avviene in maniera **sincrona**, ossia la funzione *require()* è bloccante e ritorna solamente dopo che il modulo richiesto è stato caricato (con eventuale risoluzione al volo delle sue dipendenze interne)
 - Utilizzo e sintassi molto più semplice: 
 	- Ogni singolo file è un "modulo" e ha un contesto di esecuzione privata
-	- Per esporre qualcosa all'esterno basta arricchire l'oggetto *<a href="javascript:XE_LoadSample('backend/middleware/consoleColor.js')">exports</a>.xxx = ...;*
-	- O nel caso in cui il modulo consista semplicemente in una funzione (o un costruttore) basta settare *<a href="javascript:XE_LoadSample('backend/api+edge/random.js')">module.exports</a> = ...;*
-	- Infine per dichiarare ed usare una dipendenza da qualsiasi punto del codice basta fare *var xxx = <a href="javascript:XE_LoadSample('backend/middleware/logger.js')">require</a>('nomemodulo');*
+	- Per esporre qualcosa all'esterno basta arricchire l'oggetto *<a href="javascript:XE_LoadSample('js/samples/serverinfos.js')">exports</a>.xxx = ...;*
+	- O nel caso in cui il modulo consista semplicemente in una funzione (o un costruttore) basta settare *<a href="javascript:XE_LoadSample('js/samples/Person.js')">module.exports</a> = ...;*
+	- Infine per dichiarare ed usare una dipendenza da qualsiasi punto del codice basta fare *var xxx = <a href="javascript:XE_LoadSample('js/samples/commonjs.js')">require</a>('nomemodulo');*
 	- Tipicamente nomemodulo è la path (assoluta o relativa) per arrivare al file .js
 
 ---
@@ -459,7 +459,7 @@ La dizzerenza rispetto a UMD di base è solo nel caso in cui il modulo venga esp
         for (var i = 0; i < namespaces.length; i++) {
             var packageName = namespaces[i];
             if (scope && i == namespaces.length - 1) {
-                scope[packageName] = definition(); //SETTO OGGETTO ALL'ULTIMO LEVEL
+                scope[packageName] = definition(); //SETTO MODULO ALL'ULTIMO LEVEL
             } else if (typeof scope[packageName] === 'undefined') {
                 scope[packageName] = {}; //CREO OGGETTI INTERMEDI
             }
