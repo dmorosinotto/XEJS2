@@ -22,4 +22,4 @@ var pretty = require('./pretty');
 console.log(  pretty('LISTA PERSONE:', p) );
 console.info( pretty(infos) );
 console.warn( pretty('Running On:', infos.hostedBy()) );
-console.error( infos.serverTimeUTC() );
+console.error( infos.currentTimeUTC() );
