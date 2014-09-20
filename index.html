@@ -502,12 +502,12 @@ Il [backend](http://localhost:3000/mvc) degli esempi sulle Promise è hostato in
 
 ###Realizzato utilizzando:
 
-- Express.js (<a href="javascript:XE_LoadSample('backend/server.js')">app.config</a>)
-	- Simple backend GET (<a href="javascript:XE_LoadSample('backend/api+edge/random.js')">random</a>) 
-	- Middleware (<a href="javascript:XE_LoadSample('backend/middleware/logger.js')">logger</a>)
-	- Router basics (<a href="javascript:XE_LoadSample('backend/mvc/Controllers/ValuesController.js')">Web Api</a>)
-	- MVC (<a href="javascript:XE_LoadSample('backend/mvc/Controllers/HomeController.js')">Controller</a> + <a href="javascript:XE_LoadSample('backend/mvc/_router.js')">Razor View</a>)	
-- EDGE.js (<a href="javascript:XE_LoadSample('backend/api+edge/helloworld.js')">HelloWorld</a> + <a href="javascript:XE_LoadSample('backend/api+edge/calc.js')">Calc <small>collaborando con .NET</small></a>)) 
+- Express.js ( [app.config](https://github.com/dmorosinotto/XEJS2/blob/master/backend/server.js) )
+	- Simple backend ( [GET /random](https://github.com/dmorosinotto/XEJS2/blob/master/backend/api+edge/random.js) )
+	- Middleware ( [logger](https://github.com/dmorosinotto/XEJS2/blob/master/backend/middleware/logger.js) + [consoleColor](https://github.com/dmorosinotto/XEJS2/blob/master/backend/middleware/consoleColor.js) )
+	- Router basics ( [Web API](https://github.com/dmorosinotto/XEJS2/blob/master/backend/mvc/Controllers/ValuesController.js) )
+	- MVC ( [Controller](https://github.com/dmorosinotto/XEJS2/blob/master/backend/mvc/Controllers/HomeController.js) + [Razor View](https://github.com/dmorosinotto/XEJS2/blob/master/backend/mvc/_router.js) )	
+- EDGE.js ( [HelloWorld](https://github.com/dmorosinotto/XEJS2/blob/master/backend/api+edge/helloworld.js) + [Calc](https://github.com/dmorosinotto/XEJS2/blob/master/backend/api+edge/calc.js) <small>collaborando con .NET</small> ) 
 
 </script>
 </section>
@@ -592,38 +592,33 @@ Il [backend](http://localhost:3000/mvc) degli esempi sulle Promise è hostato in
 				<option value="js/samples/namespace.js">Revealing Module + Namespace</option>
 				<option value="js/samples/singleton.js">Revealing Module + Singleton</option>
 				<option value="js/samples/define.js">AMD define object</option>
-				<option value="js/samples/console.js">AMD define module</option>
-				<option value="js/samples/hello.js">AMD define con dipendenze</option>				
-				<option value="js/samples/require.js">AMD require diverse sintassi</option>				
-				<option value="backend/api+edge/random.js">CJS: module.exports | GET /random Node.js</option>
-				<option value="backend/middleware/consoleColor.js">CJS: exports | middleware consoleColor Node.js</option>
-				<option value="backend/middleware/logger.js">CJS: require + uso UMD | middleware logger Node.js</option>
-				<option value="js/samples/pretty.js">UMD pretty usato da RequireJS e Node.js</option>
-				<option value="js/samples/unittest.js">UMD richiamo pretty da RequireJS</option>
+				<option value="js/samples/console.js">AMD define module | console.js</option>
+				<option value="js/samples/hello.js">AMD define con dipendenze | hello.js</option>				
+				<option value="js/samples/requirejs.js">AMD require diverse sintassi (hello)</option>	
+				<option value="js/samples/Person.js">CJS: module.exports | classe Person.js</option>
+				<option value="js/samples/serverinfos.js">CJS: exports | serverinfos.js</option>
+				<option value="js/samples/commonjs.js">CJS: require diverse sintasi + uso UMD (pretty)</option>
+				<option value="js/samples/pretty.js">UMD definizione modulo comune tra RequireJS e CommonJS | pretty.js</option>
+				<option value="js/samples/unittest.js">UMD richiamo da RequireJS require(pretty)</option>
 				<option value="js/samples/callback_hell.js">Callback hell "Pyramid of Doom"</option>
 				<option value="js/samples/promise.js">Promise chiamate AJAX asincrone</option>
-
 				<option value="js/samples/pattern_iife.js">Pattern: IIFE</option>
 				<option value="js/samples/pattern_revealing.js">Pattern: Revealing Module Classico</option>
 				<option value="js/samples/pattern_revealing_alternativo.js">Pattern: Revealing Module Alternativo</option>
 				<option value="js/samples/pattern_singleton.js">Pattern: Singleton</option>
 				<option value="js/samples/pattern_umd.js">Pattern: UMD</option>
 				<option value="js/samples/pattern_umd_namespace.js">Pattern: UMD + Namespace</option>
-
-				<option value="backend/server.js">Node: Express config app</option>
-				<option value="backend/api+edge/helloworld.js">Node: EDGE.js helloworld .NET</option>
-				<option value="backend/api+edge/calc.js">Node: EDGE.js passing func JS/.NET</option>
-				<option value="backend/mvc/_router.js">Node: MVC Router + Razor View</option>
-				<option value="backend/mvc/Controllers/HomeController.js">Node: MVC Controller</option>
-				<option value="backend/mvc/Controllers/ValuesController.js">Node: WebAPI Controller</option>
 			<select>
 		</div>
 		<div class="switchToConsole switchbutton"> Switch To Console</div>
 		<div class="JSCodePad" >
 			<xmp id="jsPlayground" class="code" style="text-align:left; line-height:normal;">
-//NOTE: Prima di usare gli esempi sulle Promise avviare server Node:
-// - da Termianal eseguire  ./serve   oppure   node backend/server.js
+//ATTENZIONE: Prima di usare gli esempi sulle Promise avviare server Node:
+// - da Termianal eseguire  ./serve   oppure	node backend/server.js
 // - Hosting di default su  http://localhost:3000
+//
+//NOTE: Per ottenere il codice del backend scaricare o clonare il progetto GIT
+//		https://github.com/dmorosinotto/XEJS2	e seguire le istruzioni per installarlo
 jQuery.ajax({url: 'http://localhost:3000/random'})
 	.done(function(r){ console.log(r) })
 	.fail(function(e){ console.error(e.responseText)});
@@ -668,6 +663,9 @@ jQuery.ajax({url: 'http://localhost:3000/random'})
 		
 	}
 </script>
-	
+
+<!-- FORK ME ON GITHUB -->
+<a href="https://github.com/dmorosinotto/XEJS2"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+
 </body>
 </html>

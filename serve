@@ -1,5 +1,0 @@
-#!/bin/bash
-#Start serving and monitoring Node server for backend on http://localhost:3000
-#export NODE_ENV=development 
-backend/node_modules/.bin/nodemon backend/server.js
-exit;
